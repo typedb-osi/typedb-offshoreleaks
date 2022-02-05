@@ -1,0 +1,314 @@
+define
+
+  ################
+  ################
+  ## RELATIONS ##
+  ################
+  ################
+
+  directed_relation sub relation,
+    relates source,
+    relates target,
+    owns link,
+    owns start_date,
+    owns end_date,
+    owns sourceID,
+    owns valid_until,
+    abstract;
+  
+  registered_address sub directed_relation,
+    relates has_address as source,
+    relates is_address as target;
+  
+  officer_of sub directed_relation,
+    relates is_officer as source,
+    relates has_officer as target,
+    owns status;
+  
+  intermediary_of sub directed_relation,
+    relates is_intermediary as source,
+    relates has_intermediary as target;
+
+  underlying sub directed_relation,
+    relates is_underlying as source,
+    relates has_underlying as target;
+
+  undirected_relation sub relation,
+    relates related,
+    owns link,
+    owns start_date,
+    owns end_date,
+    owns sourceID,
+    owns valid_until,
+    abstract;
+
+  connected_to sub undirected_relation,
+    relates is_connected_to as related;
+  
+  similar sub undirected_relation,
+    relates similar_to as related;
+
+    similar_company_as sub undirected_relation,
+      relates is_similar_company_as as related;
+
+  same_as sub undirected_relation,
+    relates is_same_as as related;
+
+      probably_same_officer_as sub same_as,
+        relates is_probably_same_officer_as as is_same_as;
+
+      same_intermediary_as sub same_as,
+        relates is_same_intermediary_as as is_same_as;
+
+      same_company_as sub same_as,
+        relates is_same_company_as as is_same_as;
+
+      same_address_as sub same_as,
+        relates is_same_address_as as is_same_as;
+
+      same_id_as sub same_as,
+        relates has_same_id_as as is_same_as;
+
+      same_name_as sub same_as,
+        relates has_same_name_as as is_same_as;
+
+  ################# relations to be inferred through rules at runtime ################
+
+  # inferred relations between entities
+
+  inferrable_relation sub relation,
+    relates is_connected_to_inferred,
+    abstract;
+
+  # inferred relations between entities and relations
+  share_officer_and_intermediary sub inferrable_relation,
+    relates shares_officer_and_intermediary as is_connected_to_inferred;
+
+  share_multiple_officers sub inferrable_relation,
+    relates shares_multiple_officers as is_connected_to_inferred;
+
+  same_date_start sub inferrable_relation,
+    relates has_same_date_start as is_connected_to_inferred;
+  
+  same_date_stop sub inferrable_relation,
+    relates has_same_date_stop as is_connected_to_inferred;
+
+  ################
+  ################
+  ## ENTITIES ##
+  ################
+  ################
+
+  # all EntityTypes inherit from node
+  node sub entity,
+    owns id @key,
+    owns node_id @key,
+    owns name,
+    owns country_codes,
+    owns countries,
+    owns sourceID,
+    owns valid_until,
+    owns note,
+    plays connected_to:is_connected_to,
+    plays same_id_as:has_same_id_as,
+    plays same_name_as:has_same_name_as,
+    plays similar:similar_to,
+    plays same_as:is_same_as,
+    abstract;
+
+  corporate_entity sub node,
+    plays registered_address:has_address,
+    plays officer_of:has_officer,
+    plays intermediary_of:has_intermediary,
+    plays underlying:has_underlying,
+    plays underlying:is_underlying,
+    plays same_date_start:has_same_date_start,
+    plays same_date_stop:has_same_date_stop,
+    plays share_officer_and_intermediary:shares_officer_and_intermediary,
+    plays share_multiple_officers:shares_multiple_officers,
+    abstract;
+
+  org_entity sub corporate_entity,
+    owns original_name,
+    owns former_name,
+    owns jurisdiction,
+    owns jurisdiction_description,
+    owns company_type,
+    owns address,
+    owns internal_id,
+    owns incorporation_date,
+    owns inactivation_date,
+    owns struck_off_date,
+    owns dorm_date,
+    owns status,
+    owns service_provider,
+    owns ibcRUC,
+    plays same_address_as:is_same_address_as,
+    plays similar_company_as:is_similar_company_as,
+    plays same_company_as:is_same_company_as,
+    # 468 org_entities play registered address, 622 times in total
+    plays registered_address:is_address;
+    # a single entity plays officer 3 times but we delete those entries instead
+
+  other sub corporate_entity,
+    owns jurisdiction,
+    owns jurisdiction_description,
+    owns incorporation_date,
+    owns struck_off_date,
+    owns closed_date;
+
+  officer sub corporate_entity,
+    plays officer_of:is_officer,
+    # 1015 officers play is_intermediary
+    plays intermediary_of:is_intermediary,
+    plays probably_same_officer_as:is_probably_same_officer_as;
+
+  intermediary sub corporate_entity,
+    owns status,
+    owns internal_id,
+    owns address,
+    plays same_address_as:is_same_address_as,
+    plays intermediary_of:is_intermediary,
+    plays same_intermediary_as:is_same_intermediary_as,
+    # 1186 intermediaries play is_officer 50487 times in total
+    plays officer_of:is_officer;
+
+  node_address sub node,
+    owns address,
+    plays same_address_as:is_same_address_as,
+    plays registered_address:is_address;
+
+  ################
+  ################
+  ## ATTRIBUTES ##
+  ################
+  ################
+
+  date_start sub attribute,
+    value datetime,
+    abstract;
+
+  start_date sub date_start;
+
+  incorporation_date sub date_start;
+
+  date_stop sub attribute,
+    value datetime,
+    abstract;
+
+  end_date sub date_stop;
+
+  inactivation_date sub date_stop;
+
+  struck_off_date sub date_stop;
+  
+  dorm_date sub date_stop;
+  
+  closed_date sub date_stop;
+
+  location sub attribute,
+    value string,
+    abstract;
+
+  address sub location;
+
+  jurisdiction sub location;
+
+  jurisdiction_description sub location;
+
+  countries sub location;
+
+  country_codes sub location;
+
+  identifier sub attribute,
+    value string,
+    abstract;
+
+  id sub identifier; 
+
+  node_id sub identifier;
+
+  link sub identifier;
+
+  name sub identifier;
+
+  former_name sub identifier;
+
+  original_name sub identifier;
+
+  internal_id sub identifier;
+
+  ibcRUC sub identifier;
+
+  descriptor sub attribute,
+    value string,
+    abstract;
+
+  status sub descriptor;
+
+  company_type sub descriptor;
+
+  service_provider sub descriptor;
+
+  metadata sub attribute,
+    value string,
+    abstract;
+
+  valid_until sub metadata;
+
+  note sub metadata;
+
+  sourceID sub metadata;
+
+    ################
+    ################
+    ##### RULES ####
+    ################
+    ################
+
+  rule same_date_start_rule:
+      when {
+        $x1 isa corporate_entity, has date_start $es;
+        $x2 isa corporate_entity, has date_start $es;
+        not {$x1 is $x2;};
+      } then {
+        (has_same_date_start: $x1, has_same_date_start: $x2) isa same_date_start;
+      };
+    
+  rule same_date_stop_rule:
+    when {
+      $x1 isa corporate_entity, has date_stop $es;
+      $x2 isa corporate_entity, has date_stop $es;
+      not {$x1 is $x2;};
+    } then {
+      (has_same_date_stop: $x1, has_same_date_stop: $x2) isa same_date_stop;
+    };
+
+  # rules for inferring relations between entities
+  rule share_multiple_officers_rule:
+    when {
+      $x1 isa corporate_entity;
+      $x2 isa corporate_entity;
+      $officer_of11 (has_officer:$x1, is_officer:$officer1) isa! officer_of;
+      $officer_of12 (has_officer:$x1, is_officer:$officer2) isa! officer_of;
+      $officer_of21 (has_officer:$x2, is_officer:$officer1) isa! officer_of;
+      $officer_of22 (has_officer:$x2, is_officer:$officer2) isa! officer_of;
+      not { $x1 is $x2; };
+    } then {
+      (shares_multiple_officers:$x1, shares_multiple_officers:$x2) isa share_multiple_officers;
+    };
+
+  # rule about nodes that share officer and intermediary
+  rule share_officer_and_intermediary_rule:
+    when {
+      $x1 isa corporate_entity;
+      $x2 isa corporate_entity;
+      $intermediary_of1 (has_intermediary:$x1, is_intermediary:$intermediary) isa! intermediary_of;
+      $officer_of1 (has_officer:$x1, is_officer:$officer) isa officer_of;
+      $intermediary_of2 (has_intermediary:$x2, is_intermediary:$intermediary) isa! intermediary_of;
+      $officer_of2 (has_officer:$x2, is_officer:$officer) isa officer_of;
+      not { $x1 is $x2; };
+    } then {
+      (shares_officer_and_intermediary: $x1, shares_officer_and_intermediary: $x2) isa share_officer_and_intermediary;
+    };
+
