@@ -1,7 +1,7 @@
 # TypeDB Offshoreleaks Database
 
+Schema entity types
 ![entity types](assets/screenshot_entities.png)
-![relation types](assets/screenshot_relations.png)
 
 ## Quick start
 
@@ -28,7 +28,7 @@ pip install -r requirements.txt
 This takes a little while!
 
 ```shell
-bash ./preprocess.sh "https://offshoreleaks-data.icij.org/offshoreleaks/csv/full-oldb-20220110.zip"
+bash ./preprocess.sh
 ```
 ### migrate the data into typedb 
 
