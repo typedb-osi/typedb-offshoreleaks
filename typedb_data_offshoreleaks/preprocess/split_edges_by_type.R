@@ -4,12 +4,13 @@
 
 ###### packages ######
 
-library("optparse")
-library("data.table")
-library("here")
-
-###### constants ######
-
+for (pkg in c("optparse", "data.table")) {
+  pkg_installed <- require(pkg, character.only = T)
+  if (!pkg_installed) {
+    install.packages(pkg, repos="https://cloud.r-project.org")
+    require(pkg)
+  } 
+}
 
 option_list <- list(
   make_option("--file", type="character",

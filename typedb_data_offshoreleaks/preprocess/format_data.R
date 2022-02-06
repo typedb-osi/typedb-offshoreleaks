@@ -17,9 +17,13 @@
 # @return file with file_out_suffix appended to filename
 
 ## packages 
-library("optparse")
-library("tidyr")
-library("data.table")
+for (pkg in c("optparse", "tidyr", "data.table")) {
+  pkg_installed <- require(pkg, character.only = T)
+  if (!pkg_installed) {
+    install.packages(pkg, repos="https://cloud.r-project.org")
+    require(pkg)
+  } 
+}
 
 option_list <- list(
   make_option("--file", type="character",

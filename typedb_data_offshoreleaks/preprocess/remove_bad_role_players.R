@@ -1,4 +1,11 @@
-library("data.table")
+## packages 
+for (pkg in c("data.table")) {
+  pkg_installed <- require(pkg, character.only = T)
+  if (!pkg_installed) {
+    install.packages(pkg, repos="https://cloud.r-project.org")
+    require(pkg)
+  } 
+}
 
 # remove the 3 officer_of rows where is_officer is an org_entity
 dt_officer_of = fread("data/preprocessed/relations/relationships_clean_formatted_officer_of.csv")
