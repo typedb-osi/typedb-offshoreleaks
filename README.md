@@ -42,17 +42,22 @@ pip install -r requirements.txt
 bash ./preprocess.sh
 ```
 
-### migrate the data into typedb 
+### start TypeDB and migrate the data into the database
 
+start typedb in a separate terminal
 ```shell
-# start typedb
-typedb server
+# let java use up to 16GB of memory
+JAVAOPTS="-Xmx16G" typedb server
+```
+migrate the data into typedb 
+```shell
 # run the migrator with 4 separate processes
 python3 ./migrator.py -n 4
 ```
 For options:
+
 ```shell
-python3 migrator.py -h
+python3 ./migrator.py -h
 ```
 
 ## Licence
