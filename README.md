@@ -36,13 +36,13 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### download and preprocess the datasets
+### Download and preprocess the datasets
 
 ```shell
 bash ./preprocess.sh
 ```
 
-### start TypeDB and migrate the data into the database
+### Start TypeDB and migrate the data into the database
 
 start typedb in a separate terminal
 ```shell
@@ -59,6 +59,12 @@ For options:
 ```shell
 python3 ./migrator.py -h
 ```
+
+### Start querying the database
+
+To query the database, either use [TypeDB console](https://docs.vaticle.com/docs/console/console) or download a graphical user interface. 
+A free option is [TypeDB Studio](https://github.com/vaticle/typedb-studio),
+Nodelab, the GUI used for the examples above, will be available shortly (contact [Jon Thompson](https://www.linkedin.com/in/jonatanthompson/) for information)
 
 ## Licence
 
