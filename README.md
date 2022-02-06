@@ -11,11 +11,11 @@
 "match $x isa officer, has name contains 'Shakira Isabel Mebarak Ripoll';"
 
 ### Dataset stats:
-* 391,069 addresses
 * 803,089 org_entities
 * 747,001 officers
 * 26,775 intermediaries
 * 2,920 others
+* 391,069 addresses
 * 3,273,525 relations
 ## Quick start
 
