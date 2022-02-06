@@ -69,9 +69,11 @@ python3 ./migrator.py -h
 
 ### Start querying the database
 
-To query the database, either use [TypeDB console](https://docs.vaticle.com/docs/console/console) or download a graphical user interface. 
-A free option is [TypeDB Studio](https://github.com/vaticle/typedb-studio),
-Nodelab, the GUI used for the examples above, will be available shortly (contact [Jon Thompson](https://www.linkedin.com/in/jonatanthompson/) for information)
+To query the database, either use [TypeDB console](https://docs.vaticle.com/docs/console/console) or download a graphical user interface (GUI). 
+
+A free GUI is [TypeDB Studio](https://github.com/vaticle/typedb-studio).
+
+Nodelab, the GUI used for the examples above, has advanced presentation and query features, and will be available shortly (contact [Jon Thompson](https://www.linkedin.com/in/jonatanthompson/) for information)
 
 ## Licence
 
