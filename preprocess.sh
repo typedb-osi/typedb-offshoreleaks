@@ -3,7 +3,7 @@
 
 echo "downloading the data from ICIJ"
 
-mkdir data && mkdir data/raw && mkdir data/preprocessed
+mkdir data && mkdir data/raw && mkdir data/preprocessed && mkdir data/preprocessed/entities && mkdir data/preprocessed/relations
 wget -P data/raw/ https://offshoreleaks-data.icij.org/offshoreleaks/csv/full-oldb-20220110.zip
 
 # unzip to csv 
