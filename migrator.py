@@ -10,10 +10,10 @@ def migrator_parser():
     parser.add_argument("-c", "--batch_size", help="Sets the number of queries made per commit (default: 250)",
                         default=250)
     parser.add_argument("-d", "--database", help="Database name (default: offshoreleaks)", default="offshoreleaks")
-    parser.add_argument("-e", "--existing",
+    parser.add_argument("-e", "--existing", action='store_true',
                         help="Write to database by this name even if it already exists (default: False)",
                         default=False)
-    parser.add_argument("-f", "--force",
+    parser.add_argument("-f", "--force", action='store_true',
                         help="If a database by this name already exists, delete and overwrite it (default: False)",
                         default=False)
     

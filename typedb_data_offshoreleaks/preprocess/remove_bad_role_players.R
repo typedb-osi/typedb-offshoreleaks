@@ -11,5 +11,5 @@ for (pkg in c("data.table")) {
 dt_officer_of = fread("data/preprocessed/relations/relationships_clean_formatted_officer_of.csv")
 dt_org_entity = fread("data/preprocessed/entities/nodes-entities_clean_formatted.csv")
 dt_officer_of_filter = dt_officer_of[!dt_officer_of[["_start"]] %in% dt_org_entity[["_id"]]]
-fwrite(dt_officer_of_filter, "data/preprocessed/relations/relationships_clean_formatted_officer_of_filter.csv")
+fwrite(dt_officer_of_filter, "data/preprocessed/relations/relationships_clean_formatted_officer_of.csv")
 print("done!")
