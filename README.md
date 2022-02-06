@@ -1,12 +1,22 @@
 # TypeDB Offshoreleaks Database
 
-Schema entity types
+### Intro
+### Schema entity types
 ![entity types](assets/screenshot_entities.png)
 
-Shakira
+
+### Example query
+[Shakira](https://www.icij.org/investigations/paradise-papers/6069/)
 ![screenshot_shakira.png](assets/screenshot_shakira.png)
 "match $x isa officer, has name contains 'Shakira Isabel Mebarak Ripoll';"
 
+### Dataset stats:
+* 391,069 addresses
+* 803,089 org_entities
+* 747,001 officers
+* 26,775 intermediaries
+* 2,920 others
+* 3,273,525 relations
 ## Quick start
 
 Prerequisites: Python >3.6, [TypeDB Core](https://vaticle.com/download#core) 2.6.0, [TypeDB Python Client](https://docs.vaticle.com/docs/client-api/python) 2.6.0
