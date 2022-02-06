@@ -10,8 +10,11 @@ def migrator_parser():
     parser.add_argument("-c", "--batch_size", help="Sets the number of queries made per commit (default: 250)",
                         default=250)
     parser.add_argument("-d", "--database", help="Database name (default: offshoreleaks)", default="offshoreleaks")
+    parser.add_argument("-e", "--existing",
+                        help="Write to database by this name even if it already exists (default: False)",
+                        default=False)
     parser.add_argument("-f", "--force",
-                        help="Force overwrite the database even if a database by this name already exists (default: False)",
+                        help="If a database by this name already exists, delete and overwrite it (default: False)",
                         default=False)
     
     return parser
@@ -56,17 +59,23 @@ if __name__ == "__main__":
             parallelisation=parallellisation
         ) as client:
         # checking whether database already exists; if not, create it
-        databases = [db.name() for db in client.databases().all()]
-        if not args.database in databases or args.force:
-            client.databases().create(args.database)
-            query_define = open(schema_file, "r").read()
-            # define schema
-            with client.session(args.database, SessionType.SCHEMA) as session:
-                with session.transaction(TransactionType.WRITE) as write_transaction:
-                    write_transaction.query().define(query_define)
-                    write_transaction.commit()
+        # databases = [db.name() for db in client.databases().all()]
+        if args.force:
+            try:
+                client.databases().get(args.database).delete()
+            except Exception:
+                pass 
+        if client.databases().contains(args.database):
+            if not args.existing:
+                raise UserWarning(f"database {args.database} already exists. Use --existing to use existing or --force to delete and start anew.")
         else:
-            raise UserWarning(f"database {args.database} already exists. Use --force to overwrite.")
+            client.databases().create(args.database)    
+        query_define = open(schema_file, "r").read()
+        # define schema
+        with client.session(args.database, SessionType.SCHEMA) as session:
+            with session.transaction(TransactionType.WRITE) as write_transaction:
+                write_transaction.query().define(query_define)
+                write_transaction.commit()
         # load schema
         # get all attributes and their valuetypes
         with client.session(args.database, SessionType.SCHEMA) as session:
