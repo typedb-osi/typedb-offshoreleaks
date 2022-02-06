@@ -1,6 +1,11 @@
 # TypeDB Offshoreleaks Database
 
 ### Intro
+
+The Pandora Papers consist of 11.9 million documents leaked from 14 financial service providers and obtained by the International Consortium of Investigative Journalists (ICIJ). The first stories based on the leaks appeared in print on 3 October 2021, with relevations about the secretive and often questionable financial dealings of heads of state, oligarchs, celebrities, local straw men and the accountants and lawyers providing offshore services.
+A processed tabular version of the leaked documents, combined with data from earlier leaks (Offshore Leaks, Bahama Papers, Panama Papers, Paradise Papers), was made available by the ICIJ in early December 2021. The tables contain lists of entities, officers, intermediaries and other types, and pairwise relationships between them. 
+Here, we clean and reformat the tabular data, create a simple schema with a few useful rules, and import the whole dataset into TypeDB.
+
 ### Schema entity types
 ![entity types](assets/screenshot_entities.png)
 
