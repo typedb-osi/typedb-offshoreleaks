@@ -15,10 +15,10 @@ Here, we clean and reformat the tabular data, create a simple schema, and import
 
 Porting the dataset into TypeDB gives us some advantages over traditional property graphs, such as
 
-1. Type inference: a simple Type hierarchy makes it possible to query for an abstract type, such as `corporate entity` or `directed relation`, and match all subtypes
+1. Type inference: a simple [Type hierarchy](https://docs.vaticle.com/docs/schema/overview#typedb-data-model) makes it possible to query for an abstract type, such as `corporate entity` or `directed relation`, and match all subtypes.
 2. Rule inference: [TypeDB rules](https://docs.vaticle.com/docs/schema/rules) allow us to derive inferred facts automatically when querying. 
 
-For example, the schema provided here includes a rule `same_date_stop_rule` that infers a relationship between legal entities closed on the same date, leveraging both Type inference (matching all types of stopping events) and Rule inference (inferring new facts).
+For example, the schema provided here includes the rule `same_date_stop_rule`, which infers a possible relationship between legal entities closed on the same date - leveraging both Type inference (matching all types of stopping events) and Rule inference (inferring new facts). 
 
 ### Example query
 [Shakira](https://www.icij.org/investigations/paradise-papers/6069/)
