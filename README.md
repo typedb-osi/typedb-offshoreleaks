@@ -4,13 +4,21 @@
 
 The Pandora Papers consist of 11.9 million documents leaked from 14 financial service providers and obtained by the International Consortium of Investigative Journalists (ICIJ). The first stories based on the leaks appeared in print on 3 October 2021, with relevations about the secretive and often questionable financial dealings of heads of state, oligarchs, celebrities, local straw men and the accountants and lawyers providing offshore services.
 
-A processed tabular version of the leaked documents, combined with data from earlier leaks (Offshore Leaks, Bahama Papers, Panama Papers, Paradise Papers), was made available by the ICIJ in early December 2021. The tables contain lists of entities, officers, intermediaries and other types, and pairwise relationships between them. 
+A processed text version of the leaked documents, combined with data from earlier troves of leaks (Offshore Leaks, Bahama Papers, Panama Papers, Paradise Papers), were made available by the ICIJ as a single dataset - the Offshore Leaks - in early December 2021. The text files consist of tables of entities, officers, intermediaries and other types, and pairwise relationships between them. 
 
-Here, we clean and reformat the tabular data, create a simple schema with a few useful rules, and import the whole dataset into TypeDB.
+Here, we clean and reformat the tabular data, create a simple schema, and import the whole dataset into TypeDB. 
 
-### Schema entity types
+### Schema 
+
+#### Entity types
 ![entity types](assets/screenshot_entities.png)
 
+Porting the dataset into TypeDB gives us some advantages over traditional property graphs, such as
+
+1. Type inference: a simple Type hierarchy makes it possible to query for an abstract type, such as `corporate entity` or `directed relation`, and match all subtypes
+2. Rule inference: [TypeDB rules](https://docs.vaticle.com/docs/schema/rules) allow us to derive inferred facts automatically when querying. 
+
+For example, the schema provided here includes a rule `same_date_stop_rule` that infers a relationship between legal entities closed on the same date, leveraging both Type inference (matching all types of stopping events) and Rule inference (inferring new facts).
 
 ### Example query
 [Shakira](https://www.icij.org/investigations/paradise-papers/6069/)
