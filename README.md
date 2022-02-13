@@ -35,7 +35,13 @@ For example, the schema provided here includes the rule `same_date_stop_rule`, w
 * 3,273,525 relations
 ## Quick start
 
-Prerequisites: Python >3.6, [TypeDB Core](https://vaticle.com/download#core) 2.6.0, [TypeDB Python Client](https://docs.vaticle.com/docs/client-api/python) 2.6.0
+Prerequisites: 
+* `wget` or `curl`
+* `sed`
+* Python >3.6
+* R 3.6
+* [TypeDB Core](https://vaticle.com/download#core) 2.6.x 
+* [TypeDB Python Client](https://docs.vaticle.com/docs/client-api/python) 2.6.x
 
 ### Clone this repository to your computer
 
@@ -60,12 +66,12 @@ bash ./preprocess.sh
 
 ### Start TypeDB and migrate the data into the database
 
-start typedb in a separate terminal
+in a separate terminal, start TypeDB
 ```shell
 # let java use up to 16GB of memory
 JAVAOPTS="-Xmx16G" typedb server
 ```
-migrate the data into typedb 
+Back in the original terminal, run the migrator.py script to import the data into TypeDB
 ```shell
 # run the migrator with 4 separate processes
 python3 ./migrator.py -n 4
