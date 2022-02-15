@@ -16,7 +16,7 @@
 # 4. Standardize company forms to their appreviations (Limited -> Ltd.) and remove any resulting repetitions
 # @return file with file_out_suffix appended to filename
 
-## packages 
+## packages
 for (pkg in c("optparse", "tidyr", "data.table", "stringr", "purrr")) {
   pkg_installed <- require(pkg, character.only = T)
   if (!pkg_installed) {
@@ -79,14 +79,14 @@ if (grepl(pattern="^\\d\\d-\\D\\D\\D-\\d\\d\\d\\d$", x=date_entry_regex, fixed=T
       str_detect(string = dt[[column]], pattern = "^\\d\\d-\\D\\D\\D-\\d\\d\\d\\d$"),
       yes = dt[[column]] %>%
           str_split(.,pattern = "-") %>% 
-          purrrmap(., function(x) {
+          map(., function(x) {
             if (length(grep(x[2],names(vec_date_replacement), ignore.case=T))>0) {
               x[2] <- vec_date_replacement[grep(x[2],names(vec_date_replacement), ignore.case=T)[1]]  
             }
             return(x)
             }) %>%
-          purrrmap(., rev) %>% 
-          purrrmap(., function(x)paste(x, collapse = "-")),
+          map(., rev) %>% 
+          map(., function(x)paste(x, collapse = "-")),
       no = dt[[column]])
   }
 }
@@ -97,12 +97,12 @@ if (grepl(pattern="^\\d\\d?[/.-]\\d\\d?[/.-]\\d\\d\\d?\\d?$", x=date_entry_regex
       str_detect(string = dt[[column]], pattern = "^\\d\\d?[/.-]\\d\\d?[/.-]\\d\\d\\d?\\d?$"),
       yes = dt[[column]] %>%
           str_split(.,pattern = "[/.-]") %>% 
-          purrrmap(., rev) %>% 
-          purrrmap(., function(x) {
+          map(., rev) %>% 
+          map(., function(x) {
             x[1] = ifelse(nchar(x[1])==4, yes=x[1], no=paste0(ifelse(as.integer(x[1])>17,"19","20"),x[1]))
             c(x[1], str_pad(x[2:3],c(2,2),"left",c("0","0")))
           }) %>%
-          purrrmap(., function(x) paste(x, collapse = "-")),
+          map(., function(x) paste(x, collapse = "-")),
       no =dt[[column]]
     )
   }
@@ -123,14 +123,14 @@ if (grepl(pattern="^\\D\\D\\D \\d\\d \\d\\d\\d\\d$", x=date_entry_regex, fixed=T
       str_detect(string = dt[[column]], pattern = "^\\D\\D\\D \\d\\d \\d\\d\\d\\d$"),
         yes = dt[[column]] %>%
           str_split(.,pattern = " ") %>% 
-          purrrmap(., function(x) {
+          map(., function(x) {
             if (length(grep(pattern=x[1],x=names(vec_date_replacement), ignore.case = T))>0) {
                 x[1] <- vec_date_replacement[grep(pattern=x[1],x=names(vec_date_replacement), ignore.case = T)[1]]  
             } 
             return(x)
             }) %>%
-          purrrmap(., function(x) c(x[3], x[1], x[2])) %>% 
-          purrrmap(., function(x)paste(x, collapse = "-")),
+          map(., function(x) c(x[3], x[1], x[2])) %>% 
+          map(., function(x)paste(x, collapse = "-")),
         no = dt[[column]])
   }
 }
