@@ -32,7 +32,7 @@ column_edge_type = opt$column_edge_type
 # setwd(dir_data)
 
 # edges
-dt_edges = data.table::fread(file, fill=TRUE)
+dt_edges = fread(file, fill=TRUE)
 # 
 # names(list_dt_nodes) = original_node_types
 
