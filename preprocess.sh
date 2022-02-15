@@ -18,6 +18,8 @@ unzip data/raw/*.zip -d data/raw
 echo "cleaning up characters"
 ls data/raw/*s.csv | xargs bash typedb_data_offshoreleaks/preprocess/clean_characters.sh
 
+echo "set up R environment"
+Rscript typedb_data_offshoreleaks/preprocess/renv_restore.R
 echo "format dates, names and corporate abbreviations"
 echo "formatting entities"
 Rscript typedb_data_offshoreleaks/preprocess/format_data.R --file data/raw/nodes-entities_clean.csv --date_column_regex ".*date$" --date_entry_regex "^\\d\\d-\\D\\D\\D-\\d\\d\\d\\d$|^\\d\\d?[/.-]\\d\\d?[/.-]\\d\\d\\d?\\d?$|^\\d\\d\\d\\d\\d\\d\\d\\d$|^\\D\\D\\D \\d\\d \\d\\d\\d\\d$" --date_else "" --to_title_column_regex "name|original_name|formner_name|address" --company_form_column_regex "name|original_name|former_name" --dir_out "data/preprocessed/entities"
