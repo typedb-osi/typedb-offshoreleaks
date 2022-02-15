@@ -2,7 +2,7 @@ import argparse
 
 def migrator_parser():
     parser = argparse.ArgumentParser(
-        description='Define offshore leaks database schema and insert data by calling separate migrate scripts.')
+        description='Define offshore leaks database schema and insert data.')
     parser.add_argument("-a", "--host", help="Server host address (default: localhost)", default="localhost")
     parser.add_argument("-p", "--port", help="Server port (default: 1729)", default="1729")
     parser.add_argument("-n", "--num_threads", type=int,
@@ -67,7 +67,7 @@ if __name__ == "__main__":
                 pass 
         if client.databases().contains(args.database):
             if not args.existing:
-                raise UserWarning(f"database {args.database} already exists. Use --existing to use existing or --force to delete and start anew.")
+                raise UserWarning(f"database {args.database} already exists. Use --existing to write into existing database or --force to delete it and start anew.")
         else:
             client.databases().create(args.database)    
         query_define = open(schema_file, "r").read()
