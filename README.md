@@ -46,19 +46,9 @@ Prerequisites:
 ### Clone this repository to your computer
 
 ```shell
-git clone https://github.com/typedb-osi/typedb-data-offshoreleaks.git
+git clone https://github.com/typedb-osi/typedb-data-offshoreleaks.git && cd typedb-data-offshoreleaks
 ```
-
-### Set up a virtual environment and install the dependencies:
-
-```shell
-cd typedb-data-offshoreleaks
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-### Download and preprocess the datasets
+### Download and preprocess the datasets; prepare environment
 
 ```shell
 bash ./preprocess.sh

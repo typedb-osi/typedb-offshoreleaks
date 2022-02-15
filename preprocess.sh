@@ -43,3 +43,8 @@ Rscript typedb_data_offshoreleaks/preprocess/split_edges_by_type.R --file data/r
 Rscript typedb_data_offshoreleaks/preprocess/remove_bad_role_players.R
 
 echo "preprocessing done!"
+
+echo "setting up python environment"
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
