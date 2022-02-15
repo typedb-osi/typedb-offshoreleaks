@@ -17,7 +17,7 @@
 # @return file with file_out_suffix appended to filename
 
 ## packages 
-for (pkg in c("optparse", "tidyr", "data.table")) {
+for (pkg in c("optparse", "tidyr", "data.table", "stringr", "purrr")) {
   pkg_installed <- require(pkg, character.only = T)
   if (!pkg_installed) {
     install.packages(pkg, repos="https://cloud.r-project.org")
@@ -44,7 +44,7 @@ option_list <- list(
               help = "output directory, if different from file location, [default %default]")
   )
 
-opt <- optparse::parse_args(OptionParser(option_list=option_list))
+opt <- parse_args(OptionParser(option_list=option_list))
 
 file = opt$file
 date_column_regex = opt$date_column_regex
@@ -56,7 +56,7 @@ file_out_suffix = opt$file_out_suffix
 dir_out = opt$dir_out
 
 # load data
-dt <- data.table::fread(file, fill=TRUE)
+dt <- fread(file, fill=TRUE)
 columns_dates = grep(pattern = date_column_regex, x = colnames(dt), value=T)
 vec_date_replacement = c("01","02","03","04","05","06","07","08","09","10","11","12")
 # convert from format 30-MAY-1991 to 30-05-1991 to yyyy-mm-dd
@@ -65,7 +65,7 @@ names(vec_date_replacement) = c("JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG",
 all_good = TRUE
 
 # mock data
-if (F) dt = data.table::data.table(
+if (F) dt = data.table(
   "dates1" =c("23-JUN-2011", "01-JAN-2001", "14-DEC-1994", "12-MAR-2011"),
   "dates2"=c("12/24/1999", "2/3/1999", "2/3/01", "2/12/89"),
   "dates3"=c("01092002", "02121999", "02102013", "02092009"),
@@ -76,17 +76,17 @@ if (F) dt = data.table::data.table(
 if (grepl(pattern="^\\d\\d-\\D\\D\\D-\\d\\d\\d\\d$", x=date_entry_regex, fixed=TRUE)) {
   for (column in columns_dates) {
     dt[[column]] <- ifelse(
-      stringr::str_detect(string = dt[[column]], pattern = "^\\d\\d-\\D\\D\\D-\\d\\d\\d\\d$"),
+      str_detect(string = dt[[column]], pattern = "^\\d\\d-\\D\\D\\D-\\d\\d\\d\\d$"),
       yes = dt[[column]] %>%
-          stringr::str_split(.,pattern = "-") %>% 
-          purrr::map(., function(x) {
+          str_split(.,pattern = "-") %>% 
+          purrrmap(., function(x) {
             if (length(grep(x[2],names(vec_date_replacement), ignore.case=T))>0) {
               x[2] <- vec_date_replacement[grep(x[2],names(vec_date_replacement), ignore.case=T)[1]]  
             }
             return(x)
             }) %>%
-          purrr::map(., rev) %>% 
-          purrr::map(., function(x)paste(x, collapse = "-")),
+          purrrmap(., rev) %>% 
+          purrrmap(., function(x)paste(x, collapse = "-")),
       no = dt[[column]])
   }
 }
@@ -94,15 +94,15 @@ if (grepl(pattern="^\\d\\d-\\D\\D\\D-\\d\\d\\d\\d$", x=date_entry_regex, fixed=T
 if (grepl(pattern="^\\d\\d?[/.-]\\d\\d?[/.-]\\d\\d\\d?\\d?$", x=date_entry_regex, fixed=TRUE)) {
   for (column in columns_dates) {
     dt[[column]] <- ifelse(
-      stringr::str_detect(string = dt[[column]], pattern = "^\\d\\d?[/.-]\\d\\d?[/.-]\\d\\d\\d?\\d?$"),
+      str_detect(string = dt[[column]], pattern = "^\\d\\d?[/.-]\\d\\d?[/.-]\\d\\d\\d?\\d?$"),
       yes = dt[[column]] %>%
-          stringr::str_split(.,pattern = "[/.-]") %>% 
-          purrr::map(., rev) %>% 
-          purrr::map(., function(x) {
+          str_split(.,pattern = "[/.-]") %>% 
+          purrrmap(., rev) %>% 
+          purrrmap(., function(x) {
             x[1] = ifelse(nchar(x[1])==4, yes=x[1], no=paste0(ifelse(as.integer(x[1])>17,"19","20"),x[1]))
-            c(x[1], stringr::str_pad(x[2:3],c(2,2),"left",c("0","0")))
+            c(x[1], str_pad(x[2:3],c(2,2),"left",c("0","0")))
           }) %>%
-          purrr::map(., function(x) paste(x, collapse = "-")),
+          purrrmap(., function(x) paste(x, collapse = "-")),
       no =dt[[column]]
     )
   }
@@ -111,8 +111,8 @@ if (grepl(pattern="^\\d\\d?[/.-]\\d\\d?[/.-]\\d\\d\\d?\\d?$", x=date_entry_regex
 if (grepl(pattern="^\\d\\d\\d\\d\\d\\d\\d\\d$", x=date_entry_regex, fixed=TRUE)) {
   for (column in columns_dates) {
     dt[[column]] <- ifelse(
-      stringr::str_detect(string = dt[[column]], pattern = "^\\d\\d\\d\\d\\d\\d\\d\\d$"),
-      yes = stringr::str_c(stringr::str_sub(dt[[column]],5,8),stringr::str_sub(dt[[column]],3,4),stringr::str_sub(dt[[column]],1,2), sep="-"),
+      str_detect(string = dt[[column]], pattern = "^\\d\\d\\d\\d\\d\\d\\d\\d$"),
+      yes = str_c(str_sub(dt[[column]],5,8),str_sub(dt[[column]],3,4),str_sub(dt[[column]],1,2), sep="-"),
       no = dt[[column]])
   }
 }
@@ -120,17 +120,17 @@ if (grepl(pattern="^\\d\\d\\d\\d\\d\\d\\d\\d$", x=date_entry_regex, fixed=TRUE))
 if (grepl(pattern="^\\D\\D\\D \\d\\d \\d\\d\\d\\d$", x=date_entry_regex, fixed=TRUE)) {
   for (column in columns_dates) {
     dt[[column]] <- ifelse(
-      stringr::str_detect(string = dt[[column]], pattern = "^\\D\\D\\D \\d\\d \\d\\d\\d\\d$"),
+      str_detect(string = dt[[column]], pattern = "^\\D\\D\\D \\d\\d \\d\\d\\d\\d$"),
         yes = dt[[column]] %>%
-          stringr::str_split(.,pattern = " ") %>% 
-          purrr::map(., function(x) {
+          str_split(.,pattern = " ") %>% 
+          purrrmap(., function(x) {
             if (length(grep(pattern=x[1],x=names(vec_date_replacement), ignore.case = T))>0) {
                 x[1] <- vec_date_replacement[grep(pattern=x[1],x=names(vec_date_replacement), ignore.case = T)[1]]  
             } 
             return(x)
             }) %>%
-          purrr::map(., function(x) c(x[3], x[1], x[2])) %>% 
-          purrr::map(., function(x)paste(x, collapse = "-")),
+          purrrmap(., function(x) c(x[3], x[1], x[2])) %>% 
+          purrrmap(., function(x)paste(x, collapse = "-")),
         no = dt[[column]])
   }
 }
@@ -138,8 +138,8 @@ if (grepl(pattern="^\\D\\D\\D \\d\\d \\d\\d\\d\\d$", x=date_entry_regex, fixed=T
 if (grepl(pattern="^\\d\\d\\d\\d$", x=date_entry_regex, fixed=TRUE)) {
   for (column in columns_dates) {
     dt[[column]] <- ifelse(
-      stringr::str_detect(string = dt[[column]], pattern = "^\\d\\d\\d\\d$"),
-      yes = stringr::str_c(dt[[column]], "01", "01", sep="-"),
+      str_detect(string = dt[[column]], pattern = "^\\d\\d\\d\\d$"),
+      yes = str_c(dt[[column]], "01", "01", sep="-"),
       no = dt[[column]])
   }
 }
@@ -147,10 +147,10 @@ if (grepl(pattern="^\\d\\d\\d\\d$", x=date_entry_regex, fixed=TRUE)) {
 # check whether the date reformatting succeeded
 for (column in columns_dates) {
   # check for non-empty cells that still do not conform to the typedb format
-  logical_remaining_problems = stringr::str_length(dt[[column]]) > 2  &
+  logical_remaining_problems = str_length(dt[[column]]) > 2  &
     (
       # not formatted correctly for typeql
-      stringr::str_detect(dt[[column]], pattern="^\\d\\d\\d\\d-\\d\\d-\\d\\d$", negate=T) |
+      str_detect(dt[[column]], pattern="^\\d\\d\\d\\d-\\d\\d-\\d\\d$", negate=T) |
       # not a possible date
         sapply(dt[[column]], function(x) { 
         # check that the date can exist
@@ -158,7 +158,7 @@ for (column in columns_dates) {
         return(if ("try-error" %in% class(attempt)) T else F)
       })
     )
-    # stringr::str_split(dt[[column]], "-") %>% 
+    # str_split(dt[[column]], "-") %>% 
     # sapply(., function(x) {
     #   tryCatch({
     #     as.integer(x[1])>2018 | as.integer(x[2])>12 | as.integer(x[3])>31  
@@ -182,13 +182,13 @@ if (!all_good) stop("some dates not formatted correctly")
 if (!is.null(to_title_column_regex)) {
   columns_to_title = grep(pattern = to_title_column_regex, x = colnames(dt), value=T)
   for (column in columns_to_title) {
-    dt[[column]] <- stringr::str_to_title(dt[[column]])
+    dt[[column]] <- str_to_title(dt[[column]])
   }
 }
 
 # remove trailing and repeated whitespace
 for (column in colnames(dt)) {
-  dt[[column]] <- stringr::str_squish(dt[[column]])
+  dt[[column]] <- str_squish(dt[[column]])
 }
 
 if (!is.null(company_form_column_regex)) {
@@ -238,7 +238,7 @@ if (!is.null(company_form_column_regex)) {
   for (column in columns_company_form) {
     for (name in names(company_replacement)) {
       dt[[column]] <- gsub(company_replacement[name], name, dt[[column]], ignore.case = T) 
-      #  unlike stringr::str_replace_all, gsub has ignore.case
+      #  unlike str_replace_all, gsub has ignore.case
     }
   }
 }
@@ -254,6 +254,6 @@ if (!substr(dir_out,nchar(dir_out),nchar(dir_out))=="/") {
   dir_out = paste0(dir_out, "/")
 }
 
-data.table::fwrite(dt, file=paste0(dir_out, file_out))
+fwrite(dt, file=paste0(dir_out, file_out))
 
 message("done!")  
