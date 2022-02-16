@@ -48,7 +48,8 @@ Prerequisites:
 ```shell
 git clone https://github.com/typedb-osi/typedb-data-offshoreleaks.git && cd typedb-data-offshoreleaks
 ```
-### Download and preprocess the datasets; prepare environment
+
+### Download and preprocess the datasets
 
 ```shell
 bash ./preprocess.sh
@@ -61,7 +62,14 @@ in a separate terminal, start TypeDB
 # let java use up to 16GB of memory
 JAVAOPTS="-Xmx16G" typedb server
 ```
-Back in the original terminal, run the migrator.py script to import the data into TypeDB
+Back in the original terminal, set up the Python environment
+```
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+then run the migrator.py script to import the data into TypeDB
 ```shell
 # run the migrator with 4 separate processes
 python3 ./migrator.py -n 4
@@ -71,7 +79,6 @@ For options:
 ```shell
 python3 ./migrator.py -h
 ```
-
 ### Start querying the database
 
 To query the database, either use [TypeDB console](https://docs.vaticle.com/docs/console/console) or download a graphical user interface (GUI). 
