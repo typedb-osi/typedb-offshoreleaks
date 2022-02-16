@@ -42,7 +42,7 @@ Prerequisites:
 * R 3.6
 * [TypeDB Core](https://vaticle.com/download#core) 2.6.x 
 * [TypeDB Python Client](https://docs.vaticle.com/docs/client-api/python) 2.6.x
-
+* 16GB RAM
 ### Clone this repository to your computer
 
 ```shell
@@ -62,6 +62,7 @@ in a separate terminal, start TypeDB
 # let java use up to 16GB of memory
 JAVAOPTS="-Xmx16G" typedb server
 ```
+
 Back in the original terminal, set up the Python environment
 ```
 python3 -m venv .venv
@@ -69,7 +70,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-then run the migrator.py script to import the data into TypeDB
+Run the migrator.py script to import the data into TypeDB
 ```shell
 # run the migrator with 4 separate processes
 python3 ./migrator.py -n 4
