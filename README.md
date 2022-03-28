@@ -1,6 +1,4 @@
 # TypeDB Offshoreleaks Database
-
-### Tune in to the [live webinar](https://www.meetup.com/typedb-london/events/283478691/) Thursday February 17th at 17:30 GMT!
 ### Intro
 
 The Pandora Papers consist of 11.9 million documents leaked from 14 financial service providers and obtained by the International Consortium of Investigative Journalists (ICIJ). The first stories based on the leaks appeared in print on 3 October 2021, with relevations about the secretive and often questionable financial dealings of heads of state, oligarchs, celebrities, local straw men and the accountants and lawyers providing offshore services.
